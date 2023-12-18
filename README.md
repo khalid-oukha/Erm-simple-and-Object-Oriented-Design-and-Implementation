@@ -55,6 +55,39 @@ class YouCodeMember {
     }
  
 ````
+*  __destruct function is a special method within a class that gets called automatically when an object is no longer in use or when all references to it are deleted.
+```` php 
+    public function __destruct() {
+        echo "Object destroyed.";
+    } 
+````
+* __get() magic method is used to intercept attempts to access inaccessible or non-existent properties of an object. It's triggered when code tries to read a property that is not accessible or doesn’t exist within the object.
+*  __set() method in PHP is a magic method that's invoked when you try to assign a value to an inaccessible or non-existent property within a class. It enables you to define custom logic to handle such property assignments.
+
+```` php 
+class DynamicProperties {
+    private $data = [];
+
+    public function __set($name, $value) {
+        $this->data[$name] = $value;
+    }
+
+    public function __get($name) {
+        return $this->data[$name] ?? null;
+    }
+}
+
+$obj = new DynamicProperties();
+
+// Setting properties dynamically
+$obj->name = "John";
+$obj->age = 30;
+
+// Accessing properties using magic method __get
+echo $obj->name; // Outputs: "John"
+echo $obj->age; // Outputs: 30
+````
+
 ## Objects
 
 A person can be seen as an object defined by two components: attributes (such
@@ -351,3 +384,58 @@ spl_autoload_register(function ($className) {
 });
 
 ````
+
+## Gestion des Erreurs
+
+* Les Erreurs de Syntaxe
+Les erreurs de syntaxe se produisent lorsque le code ne respecte pas la syntaxe attendue par le langage. Elles sont généralement détectées lors de la phase de compilation du code et doivent être corrigées avant l'exécution.
+
+* Les Erreurs d'Exécution
+Les erreurs d'exécution surviennent pendant l'exécution du script. Par exemple, un appel à une fonction qui n'existe pas, une division par zéro, etc. Ces erreurs peuvent être interceptées et gérées.
+
+#### Gestion des Exceptions
+
+Utilisation de try, catch, throw
+* try Block:
+The try block is where you enclose the code that might throw exceptions. It's like a guarded section where you anticipate that an exceptional condition might occur. If an exception occurs within this block, PHP looks for a corresponding catch block to handle it.
+
+* catch Block:
+The catch block is used to handle exceptions that are thrown within the corresponding try block. When an exception occurs, PHP attempts to match the thrown exception type with the types specified in the catch blocks. If there's a match, the code within that specific catch block is executed.
+
+* throw Statement:
+The throw statement is used to explicitly throw an exception. It allows you to create custom exceptions or handle exceptional situations and trigger the appropriate exception to be caught by a catch block.
+
+```` php
+try {
+    // Code that might throw an exception
+    $numerator = 10;
+    $denominator = 0;
+    
+    if ($denominator === 0) {
+        throw new Exception("Division by zero is not allowed.");
+    }
+
+    $result = $numerator / $denominator;
+    echo "Result: $result";
+} catch (Exception $e) {
+    // Handling the caught exception
+    echo "Caught exception: " . $e->getMessage();
+}
+````
+
+## Principes SOLID 
+### 1. Single Responsibility Principle (SRP)
+* This principle states that a class should have only one reason to change. In other words, a class should have only one responsibility.
+
+### 2. Open/Closed Principle (OCP)
+* This principle suggests that software entities should be open for extension but closed for modification. It encourages the extension of behavior without modifying existing code.
+
+### 3. Liskov Substitution Principle (LSP)
+* The LSP emphasizes that objects of a derived class should be usable as objects of the base class without altering the correctness of the program.
+
+### 4. Interface Segregation Principle (ISP)
+* This principle advocates splitting larger interfaces into smaller and specific interfaces, thereby avoiding forcing classes to implement unused methods.
+
+### 5. Dependency Inversion Principle (DIP)
+* The DIP promotes depending on abstractions rather than implementation details. High-level modules should not depend on low-level modules but on abstractions.
+
