@@ -1,27 +1,119 @@
+# Introduction to Object-Oriented Programming (OOP)
+
+## 1.1 What is Object-Oriented Programming (OOP)?
+Object-Oriented Programming (OOP) is a programming paradigm that structures code around "objects," which are instances of classes. These objects encapsulate **data** (properties) and **behavior** (methods), making the code modular, reusable, and easier to maintain.
+
+---
+
+## 1.2 Benefits of OOP
+- **Modularity:** Code is divided into self-contained classes, simplifying maintenance.
+- **Reusability:** Classes and objects can be reused across different projects.
+- **Scalability:** OOP makes adding new features or extending functionality seamless.
+- **Real-World Modeling:** Mirrors real-world entities, making software development intuitive.
+---
+
+## 1.3 OOP vs. Procedural Programming
+
+### Procedural Example:
+
+```php
+// Procedural approach for employee salary calculation
+$employees = [];
+
+function addEmployee($id, $name, $position, $salary, $bonus = null) {
+    global $employees;
+    $employees[$id] = [
+        'name' => $name,
+        'position' => $position,
+        'salary' => $salary,
+        'bonus' => $bonus
+    ];
+}
+
+function calculateSalary($id) {
+    global $employees;
+    $employee = $employees[$id];
+
+    if ($employee['position'] === 'Manager') {
+        return $employee['salary'] + $employee['bonus'];
+    } elseif ($employee['position'] === 'Intern') {
+        return $employee['salary'] / 2;
+    }
+    return $employee['salary'];
+}
+
+addEmployee(1, 'Alice', 'Manager', 8000, 2000);
+addEmployee(2, 'Bob', 'Engineer', 5000);
+addEmployee(3, 'Charlie', 'Intern', 2000);
+
+echo calculateSalary(1); // Output: 10000
+```
+
+### OOP Example:
+
+```php
+// OOP approach for employee salary calculation
+class Employee {
+    protected $name;
+    protected $salary;
+
+    public function __construct($name, $salary) {
+        $this->name = $name;
+        $this->salary = $salary;
+    }
+
+    public function calculateSalary() {
+        return $this->salary;
+    }
+}
+
+class Manager extends Employee {
+    private $bonus;
+
+    public function __construct($name, $salary, $bonus) {
+        parent::__construct($name, $salary);
+        $this->bonus = $bonus;
+    }
+
+    public function calculateSalary() {
+        return $this->salary + $this->bonus;
+    }
+}
+
+class Intern extends Employee {
+    public function calculateSalary() {
+        return $this->salary / 2;
+    }
+}
+
+$manager = new Manager('Alice', 8000, 2000);
+$engineer = new Employee('Bob', 5000);
+$intern = new Intern('Charlie', 2000);
+
+echo $manager->calculateSalary(); // Output: 10000
+```
+
+### Comparison:
+
+| **Feature**             | **Procedural Programming** | **Object-Oriented Programming** |
+| ----------------------- | -------------------------- |---------------------------------|
+| **Approach**            | Function-based             | Object-based                    |
+| **Data and Behavior**   | Separate                   | Combined in objects             |
+| **Code Reusability**    | Limited                    | High (inheritance)              |
+| **Ease of Maintenance** | Difficult as programs grow | Easier due to modularity        |
 
 
-# Object-Oriented PHP Documentation
-## Introduction
-## Object Oriented Programming
 
-OOP is a programming style in which we group methods and variables of a
-particular topic into single class. For example, the code that relate users
-will be in User class. OOP is heavily adopted because it support code
-organization, provides modularity and reduces the need to repeat ourselves. 
+### 2. Basic Concepts of OOP
 
-- Encapsulation is the bundling of data (attributes) and methods (functions) that operate on the data within a single unit (class).
-- Inheritance: A class can inherit from another class and take advantage of the
-  methods and properties defined by the superclass.
-- Polymorphism: Similar objects can respond to the same messages (method) in
-  different ways. 
-- Composition: an object is built from other objects. embedding classes in
-  other classes. (has a)
-
+### 2.1 Classes and Objects
 ## Classes
 
-Classes are used to group the code that handles a certain topic into one place.
+- **Classes** : are used to group the code that handles a certain topic into one place.
 It is a template for creating objects, providing initial values for state
 (properties/attributes) and implementations of behavior methods.
+- **Objects:** Instances of a class, representing specific entities with their own data and behavior.
+
 ```php
 class YouCodeMember {
     // Properties/Attributes
@@ -40,73 +132,6 @@ class YouCodeMember {
     }
 }
 ```
-[See cheatsheet](./src/class.php)
-
-* Constructors are called automatically when an object is created, ensuring that properties are initialized as soon as the object comes into existence.
-* A class can have only one constructor.
-* Overloading (multiple constructors with different parameter lists) isn't supported directly in PHP. However, default parameter values or conditional logic inside the constructor can achieve similar effects.
-```` php 
-
-    // Constructor method
-    public function __construct($name, $age, $role) {
-        $this->name = $name;
-        $this->age = $age;
-        $this->role = $role;
-    }
- 
-````
-*  __destruct function is a special method within a class that gets called automatically when an object is no longer in use or when all references to it are deleted.
-```` php 
-    public function __destruct() {
-        echo "Object destroyed.";
-    } 
-````
-* __get() magic method is used to intercept attempts to access inaccessible or non-existent properties of an object. It's triggered when code tries to read a property that is not accessible or doesn’t exist within the object.
-*  __set() method in PHP is a magic method that's invoked when you try to assign a value to an inaccessible or non-existent property within a class. It enables you to define custom logic to handle such property assignments.
-
-```` php 
-class DynamicProperties {
-    private $data = [];
-
-    public function __set($name, $value) {
-        $this->data[$name] = $value;
-    }
-
-    public function __get($name) {
-        return $this->data[$name] ?? null;
-    }
-}
-
-$obj = new DynamicProperties();
-
-// Setting properties dynamically
-$obj->name = "John";
-$obj->age = 30;
-
-// Accessing properties using magic method __get
-echo $obj->name; // Outputs: "John"
-echo $obj->age; // Outputs: 30
-````
-
-## Objects
-
-A person can be seen as an object defined by two components: attributes (such
-as eye color, age, height) and behaviors (such as walking, talking,
-breathing). In its basic definition, an object is an entity that contains both
-data and behavior.
-
-* Attributes and Behaviors in the YouCodeMember Class
-Attributes:
-
-Name, Age, Role: These properties represent the attributes of a YouCodeMember object. Each member instance can have different values for these attributes, making each member unique.
-Behaviors:
-
-displayInfo(): This method represents a behavior of a YouCodeMember object. It displays the information (name, age, role) associated with a particular member.
-
-In OOP, objects are the building blocks, they are instances of a some class. A
-program that leverages OO style is basically a collection of objects. The
-behavior of an object represents what the object can do and the data stored
-within an object represents the state of the object.
 ```php
 
 // Creating an object (instance) of the YouCodeMember class
@@ -116,33 +141,63 @@ $member1 = new YouCodeMember("Khalid oukha", 25, "Student");
 echo $member1->displayInfo(); // Output: Name: khalid oukha, Age: 25, Role: Student
 
 ```
+---
 
-[See cheatsheet](./src/class.php)
+### 2.2 Properties and Methods
 
-## $this Keyword
+- **Properties:** Variables that hold the state or attributes of an object.
+- **Methods:** Functions defined within a class that describe the object's behavior.
+---
 
-`$this` keyword are used to interact with/refer to a class method or properties
-from within the class. Among different uses of `$this` keyword, there is
-chaining methods and properties. 
+### 2.3 The `$this` Keyword
 
-[See example](./src/chaining-with-this.php)
+- `$this` refers to the current instance of the class and is used to access properties and methods within the class.
 
-## Public, Private, and Protected Keywords
+---
 
-- We use `public` if we want the methods or properties to be accessed on public
-  scope as well as within the class.
-- We use `private` if we want the methods or properties to be accessed within
-  the class only.
-- We use `protected` if we want the methods or properties to be accessed within
-  the class and class child.
+### 2.4 Constructors and Destructors
 
+- **Constructor:** A special method that initializes an object when it is created.
+- **Destructor:** A special method that is automatically called when an object is no longer in use.
+
+Example:
+
+```php
+class User {
+    public $username;
+
+    public function __construct($username) {
+        $this->username = $username;
+        echo "User {$this->username} created.\n";
+    }
+
+    public function __destruct() {
+        echo "User {$this->username} destroyed.\n";
+    }
+}
+
+$user = new User("Alice"); // Output: User Alice created.
+// When the script ends, the destructor is called:
+// Output: User Alice destroyed.
+```
+# 3. Core Principles of OOP
+
+## 3.1 Encapsulation
+
+Encapsulation is the principle of bundling data (properties) and methods (functions) that operate on the data into a single unit, typically a class. It also restricts direct access to some of an object's components, which helps prevent unintended interference and misuse.
+
+### Key Features:
+
+- **Access Modifiers**: Control the visibility of properties and methods:
+  - `public`: Accessible from anywhere.
+  - `protected`: Accessible only within the class and its subclasses.
+  - `private`: Accessible only within the class.
+  - 
 ## Access private properties
 
 To access `private` properties from outside the class, we use publicly defined
 setters and getters. Using private properties limit the possible interaction to
-our private properties from public scope. This is useful when for example we
-want to define a hook each time a method is called to get the model of the
-object, such as save the request in a log. 
+our private properties from public scope. 
 ```php
     // Getters and setters for protected property $age
     public function getAge() {
@@ -163,150 +218,194 @@ object, such as save the request in a log.
     }
 
 ```
+---
 
-[See example](./src/access-private-props.php)
+## 3.2 Inheritance
 
+Inheritance allows a class (child class) to inherit properties and methods from another class (parent class). It promotes code reuse and establishes a hierarchical relationship between classes.
 
-## Inheritance
+### Key Features:
 
-Inheritance is central concept in OOP, they enable us to reduce code
-duplications by creating a parent/master class with properties and method that
-can be inherited by child classes. In php, and many other languages, we use `extends` keyword to inherit from another class.
+- The `extends` keyword is used to create a child class.
+- A child class can override methods from the parent class.
 
-```` php 
+---
 
-// Subclass StaffMember extending YouCodeMember
-class StaffMember extends YouCodeMember {
-    // Additional property specific to StaffMember
-    private $department;
+## 3.3 Polymorphism
 
-    // Constructor for StaffMember
-    public function __construct($name, $age, $role, $department) {
-        // Calling parent class constructor
-        parent::__construct($name, $age, $role);
-        $this->department = $department;
-    }
+Polymorphism enables one interface to be used for a general class of actions, making code more flexible and reusable. It is achieved through method overriding or implementing interfaces.
 
-    // Method specific to StaffMember
-    public function getDepartment() {
-        return $this->department;
-    }
+### Key Features:
 
-    // Overriding the displayInfo method from the parent class
-    public function displayInfo() {
-        return parent::displayInfo() . ", Department: {$this->department}";
+- **Method overriding**: A child class provides a specific implementation for a method in the parent class.
+- **Interfaces**: Define a contract that implementing classes must adhere to.
+- - **Method overloading**: A class can have multiple methods with the same name but different parameter lists (number, type, or order of parameters), allowing methods to perform similar or varied tasks based on the input.
+
+#### Example 1: Child Class Overrides Parent Method and Adds Additional Logic
+
+In this example, the `Dog` class overrides the `speak` method of the `Animal` class to add extra logic while keeping the base behavior.
+
+```php
+class Animal {
+    public function speak() {
+        echo "Animal speaks.\n";
     }
 }
 
-// Creating an object (instance) of the StaffMember class
-$staffMember = new StaffMember("Alice Smith", 28, "Administrator", "HR");
+class Dog extends Animal {
+    public function speak() {
+        // Retain parent behavior
+        parent::speak();
+        // Add additional logic
+        echo "Dog barks.\n";
+    }
+}
 
-// Accessing methods and properties
-echo $staffMember->displayInfo(); // Output: Name: ismail, Age: 28, Role: Administrator, Department: coash
-````
-
-[See example](./src/inheritance.php)
-
-
-## Abstract classes
-
-Put simply, an abstract class is a class with at least one abstract method and
-with a abstract keyword in front of it. They get used for multiple reasons:
-
-1. When we want be commit to writing certain class methods, or when we are only sure of there names.
-2. When we want child classes to define these methods.
-
-Abstract classes cannot be instantiated, and whatever non-abstract class
-derived from it must include actual implementations of all inherited abstract
-methods and properties. 
-
-[See example](./src/abstract-classess.php)
-
-## Interfaces
-
-An interface can be seen as an outline of what a particular object can do. They
-are considered one of the main building blocks of the SOLID pattern. With
-interfaces we can create code which specifies which methods a class must
-implement, without having to define how these methods are implemented. 
-
-A lot of people may find interface to be similar to abstract classes, or
-doesn't know which one to choice, here a few notes on that:
-
-Interfaces are contract, we "implement" them to provide code and behavior that
-fit the description of the interface. In the other hand, Abstract Classes are
-behavior, we "extend" them and add additional behaviors, sometimes we are
-required to add specific behavior left that are left out by the class (methods
-marked with "abstract").
-
-Interface maybe used when multiple classes need to define the same methods.
-However, abstract class might be appropriate when we need the share code
-between subclasses
-
-| Interface | Abstract Class |
-|-----------|----------------|
-| An interface cannot have concrete methods in it i.e. methods with definition. | An abstract class can have both abstract methods and concrete methods in it. |
-| All methods declared in interface should be public | An abstract class can have public, private and protected etc methods. |
-| Multiple interfaces can be implemented by one class. | One class can extend only one abstract class. |
-
-[See example](./src/interface.php)
-
-## Polymorphism
-
-Put simply, Polymorphism is a principle that state that methods in different
-classes doing similar things should have the same name. 
-
-[See example](./src/polymorphism.php)
-
-## Type hinting
-
-Type hinting is used to specify the expected data type for an argument. It is
-used for better code organization and improved error messages.
-
-```php
-// Class
-function funName(ClassName $object) {  }
-// Strings
-function funName(string $arg) {  }
-// Array
-function funName(array $arg) {  }
-// Boolean
-function funName(bool $arg) {  }
-// Integers
-function funName(int $arg) {  }
-// Floats
-function funName(float $arg) {  }
+$dog = new Dog();
+$dog->speak(); 
+// Outputs:
+// Animal speaks.
+// Dog barks.
 ```
 
-To specify the output type of a function, we add after `(expected type)` `: int`
+#### Example 2: Interface Implementation
 
-## Static methods and properties
+Here, two classes (`Circle` and `Square`) implement a `Shape` interface and provide their specific implementation for the `draw` method.
 
-Static methods and properties are those properties with `static` keyword
-in front of them. They enable us to approach methods and properties of a class
-without the need to first create an object out of the class. They are used
+```php
+interface Shape {
+    public function draw();
+}
+
+class Circle implements Shape {
+    public function draw() {
+        echo "Drawing a Circle.\n";
+    }
+}
+
+class Square implements Shape {
+    public function draw() {
+        echo "Drawing a Square.\n";
+    }
+}
+
+$circle = new Circle();
+$circle->draw(); // Outputs: Drawing a Circle.
+
+$square = new Square();
+$square->draw(); // Outputs: Drawing a Square.
+```
+
+---
+
+
+## 3.4 Abstraction
+
+Abstraction focuses on exposing only the essential features of an object while hiding the unnecessary details. It is implemented using abstract classes or interfaces.
+
+### Key Features:
+
+- **Abstract Classes**: Serve as a blueprint for other classes. Cannot be instantiated directly.
+- **Interfaces**: Define a set of methods that implementing classes must include.
+
+### Example of Abstract Classes:
+
+Abstract classes can define both concrete methods (with implementation) and abstract methods (without implementation). A child class inheriting the abstract class must provide an implementation for the abstract methods.
+
+```php
+abstract class Vehicle {
+    abstract public function move();
+
+    public function fuelType() {
+        echo "This vehicle uses fuel.\n";
+    }
+}
+
+class Car extends Vehicle {
+    public function move() {
+        echo "Car is moving.\n";
+    }
+}
+
+$car = new Car();
+$car->move(); // Outputs: Car is moving.
+$car->fuelType(); // Outputs: This vehicle uses fuel.
+```
+
+### Example of Interfaces:
+
+Interfaces only declare methods and do not provide any implementation. A class that implements an interface must provide an implementation for all its methods.
+
+```php
+interface Flyable {
+    public function fly();
+}
+
+class Airplane implements Flyable {
+    public function fly() {
+        echo "Airplane is flying.\n";
+    }
+}
+
+class Bird implements Flyable {
+    public function fly() {
+        echo "Bird is flying.\n";
+    }
+}
+
+$plane = new Airplane();
+$plane->fly(); // Outputs: Airplane is flying.
+
+$bird = new Bird();
+$bird->fly(); // Outputs: Bird is flying.
+```
+
+### Key Differences Between Abstract Classes and Interfaces:
+
+| Feature                  | Abstract Classes                            | Interfaces                             |
+|--------------------------|---------------------------------------------|---------------------------------------|
+| **Inheritance**          | A class can inherit only one abstract class | A class can implement multiple interfaces |
+| **Implementation**       | Can have both abstract and concrete methods | All methods must be abstract            |
+| **Properties**           | Can have properties with access modifiers  | Cannot have properties                  |
+| **Default Method Logic** | Can provide default method implementations  | Cannot provide any method implementations |
+
+---
+
 mainly as utilities. The following are the main use cases for them:
+## Static Methods and Properties
 
-- As counters, to save the last value that has been assigned to them. For
-  example, the method `add1ToCars()` adds 1 to the `$numberOfCars` property
-  each time they are invoked.
+Static methods and properties are those properties with the `static` keyword in front of them. They enable us to approach methods and properties of a class without the need to first create an object out of the class. They are used mainly as utilities. The following are the main use cases for them:
 
-- As utilities for the main classes. Utility methods can perform all kinds of
-  tasks, such as: conversion between measurement systems (kilograms to pounds),
-  data encryption, sanitation, and any other task that is not more than a
-  service for the main classes. The example given below is of a static method
-  with the name of redirect that redirects the user to the URL that we pass to
-  it as an argument.
+### Example of Static Methods with `self` Keyword
+
+Static methods can call other static methods or access static properties using the `self` keyword. This is useful when logic does not depend on instance-specific data.
 
 ```php
-class Utilis {
-  static public function redirect($url) {
-    header("Location: $url");
-    exit;
-  }
+class Example {
+    // Static property
+    private static $greeting = "Hello";
+
+    // Static method
+    public static function sayHello() {
+        return self::$greeting . " from static method!";
+    }
 }
 
-Utilis::redirect("http://www.phpthusiast.com");
+// Calling the static method externally
+echo Example::sayHello();
+// Outputs: Hello from static method!
 ```
+
+### When to Use Static Methods and Properties
+
+1. **Utility Functions**:
+2. **Shared State or Behavior**:
+4. **Helper Classes**:
+
+
+### Key Considerations for Static Usage
+
+- **Not for Instance-Specific Logic**: Avoid static methods if the logic requires or modifies the state of individual objects.
 
 ## Traits
 
@@ -328,7 +427,46 @@ When using a trait, we should be on the lookout for code duplication and for
 naming conflicts that are the result of calling the methods in different traits
 with the same name. 
 
-[See example](./src/traits.php)
+Imagine you are building a project where multiple classes (e.g., `User` and `Order`) need logging functionality.
+
+```php
+trait Logger {
+    public function log($message) {
+        echo "[LOG]: $message\n";
+    }
+}
+
+class User {
+    use Logger;
+
+    public function createUser($name) {
+        $this->log("Creating user: $name");
+        echo "User '$name' created.\n";
+    }
+}
+
+class Order {
+    use Logger;
+
+    public function createOrder($orderId) {
+        $this->log("Creating order: $orderId");
+        echo "Order '$orderId' created.\n";
+    }
+}
+
+// Using the classes
+$user = new User();
+$user->createUser("Alice");
+// Outputs:
+// [LOG]: Creating user: Alice
+// User 'Alice' created.
+
+$order = new Order();
+$order->createOrder("12345");
+// Outputs:
+// [LOG]: Creating order: 12345
+// Order '12345' created.
+```
 
 ## Namespaces and code integration
 
@@ -383,44 +521,6 @@ spl_autoload_register(function ($className) {
     }
 });
 
-````
-
-## Gestion des Erreurs
-
-* Les Erreurs de Syntaxe
-Les erreurs de syntaxe se produisent lorsque le code ne respecte pas la syntaxe attendue par le langage. Elles sont généralement détectées lors de la phase de compilation du code et doivent être corrigées avant l'exécution.
-
-* Les Erreurs d'Exécution
-Les erreurs d'exécution surviennent pendant l'exécution du script. Par exemple, un appel à une fonction qui n'existe pas, une division par zéro, etc. Ces erreurs peuvent être interceptées et gérées.
-
-#### Gestion des Exceptions
-
-Utilisation de try, catch, throw
-* try Block:
-The try block is where you enclose the code that might throw exceptions. It's like a guarded section where you anticipate that an exceptional condition might occur. If an exception occurs within this block, PHP looks for a corresponding catch block to handle it.
-
-* catch Block:
-The catch block is used to handle exceptions that are thrown within the corresponding try block. When an exception occurs, PHP attempts to match the thrown exception type with the types specified in the catch blocks. If there's a match, the code within that specific catch block is executed.
-
-* throw Statement:
-The throw statement is used to explicitly throw an exception. It allows you to create custom exceptions or handle exceptional situations and trigger the appropriate exception to be caught by a catch block.
-
-```` php
-try {
-    // Code that might throw an exception
-    $numerator = 10;
-    $denominator = 0;
-    
-    if ($denominator === 0) {
-        throw new Exception("Division by zero is not allowed.");
-    }
-
-    $result = $numerator / $denominator;
-    echo "Result: $result";
-} catch (Exception $e) {
-    // Handling the caught exception
-    echo "Caught exception: " . $e->getMessage();
-}
 ````
 
 ## Principes SOLID 
