@@ -52,45 +52,7 @@ echo calculateSalary(1); // Output: 10000
 ### OOP Example:
 
 ```php
-// OOP approach for employee salary calculation
-class Employee {
-    protected $name;
-    protected $salary;
 
-    public function __construct($name, $salary) {
-        $this->name = $name;
-        $this->salary = $salary;
-    }
-
-    public function calculateSalary() {
-        return $this->salary;
-    }
-}
-
-class Manager extends Employee {
-    private $bonus;
-
-    public function __construct($name, $salary, $bonus) {
-        parent::__construct($name, $salary);
-        $this->bonus = $bonus;
-    }
-
-    public function calculateSalary() {
-        return $this->salary + $this->bonus;
-    }
-}
-
-class Intern extends Employee {
-    public function calculateSalary() {
-        return $this->salary / 2;
-    }
-}
-
-$manager = new Manager('Alice', 8000, 2000);
-$engineer = new Employee('Bob', 5000);
-$intern = new Intern('Charlie', 2000);
-
-echo $manager->calculateSalary(); // Output: 10000
 ```
 
 ### Comparison:

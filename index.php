@@ -1,62 +1,63 @@
 <?php
-include_once 'Pizza.php';
-include_once 'PizzaBase.php';
-include_once 'PizzaPattern.php';
-include_once 'PizzaExtra.php';
-
-// Class for Pizza Pattern (e.g., Margherita, Pepperoni)
-
-
-// Class for Pizza Extras (e.g., Cheese, Olives, Mushrooms)
-
-
-// Pizza Class
-
-
-// Usage Example
-
-// Create a base
-$thinCrust = new PizzaBase("Thin Crust", 5.0);
-
-// Create patterns
-$margherita = new PizzaPattern("Margherita", 7.0);
-$pepperoni = new PizzaPattern("Pepperoni", 8.5);
-
-// Create extras
-$cheese = new PizzaExtra("Extra Cheese", 2.0);
-$olives = new PizzaExtra("Olives", 1.5);
-$mushrooms = new PizzaExtra("Mushrooms", 2.0);
-
-// Create a Pizza
-$pizza = new Pizza($thinCrust);
-$pizza->addPattern($margherita);
-$pizza->addPattern($pepperoni);
-$pizza->addExtra($cheese);
-$pizza->addExtra($olives);
-$pizza->addExtra($mushrooms);
-
-// Display Pizza Details
-$pizza->displayDetails();
-
-interface Tasks
+class Employee
 {
-    public function coding($language);
-    public function learning($subject);
-}
+    private $name;
+    private $salary;
 
-class YoucodeMember implements Tasks
-{
-    public function coding($language)
+//    public function __construct($name,$salary)
+//    {
+//        $this->name = $name;
+//        $this->salary = $salary;
+//    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getName()
     {
-        echo "<br> am coding <br>";
+        return $this->name;
     }
 
-    public function learning($subject)
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
     {
-        echo "<br> am learning <br>";
+        $this->name = $name;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSalary()
+    {
+        return $this->salary;
+    }
+
+    /**
+     * @param mixed $salary
+     */
+    public function setSalary($salary)
+    {
+        $this->salary = $salary;
+    }
+
 }
 
-$member = new YoucodeMember();
-$member->coding("PHP");
-$member->learning("OOP");
+$employee = new Employee("abdljbar","280000");
+
+$employee = new Employee();
+$employee->setName("abdljbar");
+$employee->setSalary(20000);
+class Manager extends Employee
+{
+    private $bonus;
+
+    public function __construct()
+    {
+
+    }
+
+}
