@@ -1,51 +1,62 @@
 <?php
-require_once 'database.php';
-class youcodetest{
-    private $conn;
+include_once 'Pizza.php';
+include_once 'PizzaBase.php';
+include_once 'PizzaPattern.php';
+include_once 'PizzaExtra.php';
 
-    public function __construct(PDO $db) {
-        $this->conn = $db;
-    }
+// Class for Pizza Pattern (e.g., Margherita, Pepperoni)
 
-    public function adduser($username, $email , $password){
-        $hashpassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "insert into users (Name_user,email,Password_user) values (?, ?, ?)";
-        $stmt = $this -> conn->prepare($sql);
-        $stmt -> execute([$username,$email,$hashpassword]);
-        return $stmt->rowCount() > 0;
-    }
-    //readuser
-    public function readUser($id){
-        $sql = "select * from users where ID = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt -> execute($id);
-        return $stmt -> fetch(PDO::FETCH_ASSOC);
-    }
+// Class for Pizza Extras (e.g., Cheese, Olives, Mushrooms)
 
-    public function updateUser($id,$username, $email , $password){
-        $hashpassword = password_hash($password,PASSWORD_DEFAULT);
-        $sql = "update users set Name_user = ?,email = ?,Password_user = ? where ID = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$username,$email,$hashpassword,$id]);
 
-        return $stmt->rowCount()>0;
-    }
-    public function Delete($id){
-        $sql = "DELETE FROM users WHERE ID = ?";
-        $stmt = $this -> conn -> prepare($sql);
-        $stmt -> execute([$id]);
-    }
+// Pizza Class
 
+
+// Usage Example
+
+// Create a base
+$thinCrust = new PizzaBase("Thin Crust", 5.0);
+
+// Create patterns
+$margherita = new PizzaPattern("Margherita", 7.0);
+$pepperoni = new PizzaPattern("Pepperoni", 8.5);
+
+// Create extras
+$cheese = new PizzaExtra("Extra Cheese", 2.0);
+$olives = new PizzaExtra("Olives", 1.5);
+$mushrooms = new PizzaExtra("Mushrooms", 2.0);
+
+// Create a Pizza
+$pizza = new Pizza($thinCrust);
+$pizza->addPattern($margherita);
+$pizza->addPattern($pepperoni);
+$pizza->addExtra($cheese);
+$pizza->addExtra($olives);
+$pizza->addExtra($mushrooms);
+
+// Display Pizza Details
+$pizza->displayDetails();
+
+interface Tasks
+{
+    public function coding($language);
+    public function learning($subject);
 }
 
-// add user :
-$db = new Database("localhost", "root", "", "hr1");
-$user = new youcodetest($db->getConnection());
-//$user->adduser("khalid","email@gmail.com","khalid");
-var_dump($user);
+class YoucodeMember implements Tasks
+{
+    public function coding($language)
+    {
+        echo "<br> am coding <br>";
+    }
 
-// update user :
-$user ->updateUser(6,"hahaha","casaaaa@","68");
+    public function learning($subject)
+    {
+        echo "<br> am learning <br>";
+    }
+}
 
-$user -> Delete(6);
+$member = new YoucodeMember();
+$member->coding("PHP");
+$member->learning("OOP");
